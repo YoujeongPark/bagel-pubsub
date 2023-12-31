@@ -8,12 +8,15 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.io.IOException;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @RequiredArgsConstructor
 @Component
 public class WebSocketDataHandler extends TextWebSocketHandler {
 
+    private final Set<WebSocketSession> sessions = ConcurrentHashMap.newKeySet();
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws IOException {
         String payload = message.getPayload();
