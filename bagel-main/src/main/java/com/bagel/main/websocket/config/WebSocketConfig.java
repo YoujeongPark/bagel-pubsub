@@ -1,4 +1,4 @@
-package com.bagel.main.config;
+package com.bagel.main.websocket.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.WebSocketHandler;

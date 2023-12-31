@@ -9,5 +9,5 @@ import lombok.*;
 public class DataMessage {
     private String content;
     private String sender;
-    private MessageType type;
+    private RequestType type;
 }
