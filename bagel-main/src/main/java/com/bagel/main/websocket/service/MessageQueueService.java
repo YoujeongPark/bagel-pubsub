@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
@@ -21,13 +22,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-
 public class MessageQueueService {
     private final ObjectMapper objectMapper;
     private final Map<String, Queue<String>> topicQueues = new ConcurrentHashMap<>();
     private final Map<String, Boolean> topicProcessFlags = new ConcurrentHashMap<>();
     private final Map<String, List<WebSocketSession>> topicSubscribers = new ConcurrentHashMap<>();
 
+    @Qualifier("taskExecutor")
     @Autowired
     private AsyncTaskExecutor taskExecutor;
 
@@ -51,8 +52,7 @@ public class MessageQueueService {
         topicQueues.putIfAbsent(topic, new ConcurrentLinkedQueue<>());
         topicQueues.get(topic).add(message);
 
-        var isProcessing = Optional.ofNullable(topicProcessFlags.get(topic))
-                                   .orElse(false);
+        var isProcessing = topicProcessFlags.getOrDefault(topic, false);
 
         if (!isProcessing) {
             taskExecutor.submit(() -> sendMessages(topic));
