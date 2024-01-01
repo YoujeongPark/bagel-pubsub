@@ -102,7 +102,7 @@ public class MessageQueueService {
                     }
                 }
             } catch (JsonProcessingException e) {
-                log.error("failed to serialize response");
+                log.error("Failed to serialize response for topic: {}. Error: {}", topic, e.getMessage());
             }
         }
         topicProcessFlags.put(topic, false);

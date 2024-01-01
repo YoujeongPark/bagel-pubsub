@@ -27,7 +27,7 @@ public class WebSocketDataHandler extends TextWebSocketHandler {
     @Override
     protected void handleTextMessage(@NonNull WebSocketSession session, TextMessage message) {
         String payload = message.getPayload();
-        log.debug("payload {}" , payload);
+        log.info("payload {}" , payload);
 
         try {
             var requestMessage = objectMapper.readValue(payload, BagelRequestDTO.class);
@@ -50,7 +50,6 @@ public class WebSocketDataHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         session.sendMessage(new TextMessage("welcome!!!"));
-        //TODO: session 에서 token으로 사용자 가져오기.
     }
 
     @Override
@@ -68,7 +67,7 @@ public class WebSocketDataHandler extends TextWebSocketHandler {
 
             session.sendMessage(new TextMessage(objectMapper.writeValueAsString(bagelResponse)));
         } catch(Exception e) {
-            log.error(e.getMessage());
+            log.error("Error sending response message", e);
         }
     }
 }
